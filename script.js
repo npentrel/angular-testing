@@ -2,19 +2,19 @@
 
 var app = angular.module("GitHubViewer", []);
 
-var MainController = function($scope, $http, $interval, $log) {
+var MainController = function($scope, github, $interval, $log) {
 
-	var onUserComplete = function(response) {
-		$scope.user = response.data;
-		$http.get($scope.user.repos_url).then(onRepos, onError);
+	var onUserComplete = function(data) {
+		$scope.user = data;
+		github.getRepos($scope.user).then(onRepos, onError);
 	};
 
 	var onError = function(reason) {
 		$scope.error = "Could not fetch the data";
 	};
 
-	var onRepos = function(response) {
-		$scope.repos = response.data;
+	var onRepos = function(data) {
+		$scope.repos = data;
 	}
 
 	var decrementCountdown = function(){
@@ -32,11 +32,9 @@ var MainController = function($scope, $http, $interval, $log) {
 
 	$scope.search = function(username) {
 		$log.info("Searching for " + username);
-		$http.get("https://api.github.com/users/" + username).then(onUserComplete, onError);
+		github.getUser(username).then(onUserComplete, onError);
 		$scope.countdown = 0;
 	};
-
-//	$http.get("https://api.github.com/users/angular").then(onUserComplete, onError);
 
 	$scope.username = "angular";
 	$scope.message = "Github Viewer";
@@ -46,6 +44,6 @@ var MainController = function($scope, $http, $interval, $log) {
 
 };
 
-app.controller("MainController", ["$scope", "$http", "$interval", "$log", MainController]);
+app.controller("MainController", MainController);
 
 }());
