@@ -10,6 +10,7 @@
 	</head>
 	<body ng-controller="MainController">
 		<h1>{{message}}</h1>
+		<div ng-show="user.countdown != 0">You have {{countdown}} seconds to search! </div>
 		<div>{{error}}</div>
 		<form name="searchUser" ng-submit="search(username)">
 			<input type="search" required placeholder="Username to find" ng-model="username" />
